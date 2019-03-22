@@ -1,11 +1,6 @@
 module.exports = {
   presets: [
-    [
-      '@babel/preset-env',
-      {
-        useBuiltIns: 'entry',
-      },
-    ],
+    ['@babel/preset-env', { modules: false }],
     '@babel/preset-react',
     '@babel/preset-typescript',
   ],
@@ -20,6 +15,9 @@ module.exports = {
           },
         ],
       ],
+    },
+    production: {
+      plugins: [['babel-plugin-transform-react-remove-prop-types', { mode: 'wrap' }]],
     },
   },
 }
