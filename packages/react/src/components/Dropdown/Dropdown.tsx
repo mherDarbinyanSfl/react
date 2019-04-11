@@ -41,6 +41,8 @@ import ListItem from '../List/ListItem'
 import Icon, { IconProps } from '../Icon/Icon'
 import Portal from '../Portal/Portal'
 
+export type DropdownItemsPosition = 'above' | 'below'
+
 export interface DropdownSlotClassNames {
   clearIndicator: string
   container: string
@@ -112,6 +114,9 @@ export interface DropdownProps extends UIComponentProps<DropdownProps, DropdownS
 
   /** Array of props for generating list options (Dropdown.Item[]) and selected item labels(Dropdown.SelectedItem[]), if it's a multiple selection. */
   items?: ShorthandCollection
+
+  /** Dropdown items can be positioned above or below the trigger. */
+  itemsPosition?: DropdownItemsPosition
 
   /**
    * Function that converts an item to string. Used when dropdown has the search boolean prop set to true.
@@ -252,6 +257,7 @@ class Dropdown extends AutoControlledComponent<Extendable<DropdownProps>, Dropdo
     highlightedIndex: PropTypes.number,
     inline: PropTypes.bool,
     items: customPropTypes.collectionShorthand,
+    itemsPosition: PropTypes.oneOf(['above', 'below']),
     itemToString: PropTypes.func,
     loading: PropTypes.bool,
     loadingMessage: customPropTypes.itemShorthand,
@@ -279,6 +285,7 @@ class Dropdown extends AutoControlledComponent<Extendable<DropdownProps>, Dropdo
   static defaultProps: DropdownProps = {
     as: 'div',
     clearIndicator: 'stardust-close',
+    itemsPosition: 'below',
     itemToString: item => {
       if (!item || React.isValidElement(item)) {
         return ''
