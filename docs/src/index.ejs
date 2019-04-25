@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/brands.css" integrity="sha384-1KLgFVb/gHrlDGLFPgMbeedi6tQBLcWvyNUN+YKXbD7ZFbjX6BLpMDf0PJ32XJfX" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://unpkg.com/react-vis@<%= htmlWebpackPlugin.options.versions.reactVis %>/dist/style.css" />
   <link rel="shortcut icon" type="image/x-icon" href='<%= __BASENAME__ + 'logo.png' %>'/>
   <title>Stardust</title>
   <script>
@@ -24,6 +25,11 @@
       }
     })()
   </script>
+  <style>
+    html {
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
   <script src="https://cdn.jsdelivr.net/npm/@babel/polyfill@7/dist/polyfill.min.js"></script>
@@ -47,7 +53,11 @@
   <!-- Use unminified React when not in production so we get errors and warnings -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/<%= htmlWebpackPlugin.options.versions.propTypes %>/prop-types<%= __PROD__ ? '.min' : '' %>.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react/<%= htmlWebpackPlugin.options.versions.react %>/umd/react<%= __PROD__ ? '.production.min' : '.development' %>.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/<%= htmlWebpackPlugin.options.versions.reactDOM %>/umd/react-dom<%= __PROD__ ? '.production.min' : '.development' %>.js"></script>
+  <%if (__PROD__) {%>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/<%= htmlWebpackPlugin.options.versions.reactDOM %>/umd/react-dom.production.min.js"></script>
+  <% } else{ %>
+    <script src="https://cdn.jsdelivr.net/npm/@hot-loader/react-dom@<%= htmlWebpackPlugin.options.versions.reactDOM %>/umd/react-dom.development.js"></script>
+    <%}%>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/<%= htmlWebpackPlugin.options.versions.reactDOM %>/umd/react-dom-server.browser<%= __PROD__ ? '.production.min' : '.development' %>.js"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@<%= htmlWebpackPlugin.options.versions.babelStandalone %>/babel.min.js"></script>

@@ -133,28 +133,6 @@ class Sidebar extends React.Component<any, any> {
       left: 0,
       padding: 0,
       maxHeight: '100vh',
-
-      '::-webkit-scrollbar': {
-        '-webkit-appearance': 'none',
-        height: '10px',
-        width: '10px',
-      },
-      '::-webkit-scrollbar-track': {
-        background: 'rgba(255, 255, 255, 0.1)',
-        borderRadius: 0,
-      },
-      '::-webkit-scrollbar-thumb': {
-        cursor: 'pointer',
-        borderRadius: '5px',
-        background: 'rgba(255, 255, 255, 0.25)',
-        transition: 'color 0.2s ease',
-      },
-      '::-webkit-scrollbar-thumb:window-inactive': {
-        background: 'rgba(255, 255, 255, 0.15)',
-      },
-      '::-webkit-scrollbar-thumb:hover': {
-        background: 'rgba(255, 255, 255, 0.35)',
-      },
     }
 
     const menuSectionStyles: ICSSInJSStyle = {
@@ -296,6 +274,13 @@ class Sidebar extends React.Component<any, any> {
         styles: menuItemStyles,
       },
       {
+        key: 'faq',
+        content: 'FAQ',
+        as: NavLink,
+        to: '/faq',
+        styles: menuItemStyles,
+      },
+      {
         key: 'accessiblity',
         content: 'Accessibility',
         as: NavLink,
@@ -314,6 +299,13 @@ class Sidebar extends React.Component<any, any> {
         content: 'Theming Examples',
         as: NavLink,
         to: '/theming-examples',
+        styles: menuItemStyles,
+      },
+      {
+        key: 'layout',
+        content: 'Layout',
+        as: NavLink,
+        to: '/layout',
         styles: menuItemStyles,
       },
       {
@@ -372,6 +364,13 @@ class Sidebar extends React.Component<any, any> {
         content: 'Dropdowns',
         as: NavLink,
         to: '/prototype-dropdowns',
+        styles: menuItemStyles,
+      },
+      {
+        key: 'alerts',
+        content: 'Alerts',
+        as: NavLink,
+        to: '/prototype-alerts',
         styles: menuItemStyles,
       },
       {

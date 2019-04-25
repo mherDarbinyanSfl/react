@@ -1,3 +1,5 @@
+import * as customPropTypes from '@stardust-ui/react-proptypes'
+import * as _ from 'lodash'
 import * as PropTypes from 'prop-types'
 import * as React from 'react'
 
@@ -6,14 +8,14 @@ import {
   UIComponentProps,
   ContentComponentProps,
   commonPropTypes,
-  customPropTypes,
   childrenExist,
+  isFromKeyboard,
   rtlTextContainer,
 } from '../../lib'
-import { RenderResultConfig } from 'src/lib/renderComponent'
-import { defaultBehavior } from '../../lib/accessibility'
+import { RenderResultConfig } from '../../lib/renderComponent'
+import { alertBehavior } from '../../lib/accessibility'
 import { Accessibility } from '../../lib/accessibility/types'
-import { ReactProps, ShorthandValue } from '../../types'
+import { ComponentEventHandler, ReactProps, ShorthandValue } from '../../types'
 import Box from '../Box/Box'
 import Button, { ButtonProps } from '../Button/Button'
 
@@ -25,7 +27,8 @@ export interface AlertSlotClassNames {
 export interface AlertProps extends UIComponentProps, ContentComponentProps<ShorthandValue> {
   /**
    * Accessibility behavior if overridden by the user.
-   * @default defaultBehavior
+   * @default alertBehavior
+   * @available alertWarningBehavior
    */
   accessibility?: Accessibility
 
@@ -41,6 +44,13 @@ export interface AlertProps extends UIComponentProps, ContentComponentProps<Shor
   /** An alert may be formatted to display information. */
   info?: boolean
 
+  /**
+   * Called after user's focus.
+   * @param {SyntheticEvent} event - React's original SyntheticEvent.
+   * @param {object} data - All props.
+   */
+  onFocus?: ComponentEventHandler<AlertProps>
+
   /** An alert may be formatted to display a successful message. */
   success?: boolean
 
@@ -48,13 +58,18 @@ export interface AlertProps extends UIComponentProps, ContentComponentProps<Shor
   warning?: boolean
 }
 
+export interface AlertState {
+  isFromKeyboard: boolean
+}
+
 /**
  * A Alert displays information that explains nearby content.
  * @accessibility
  * Other considerations:
+ *  - by default, content from warning and danger variants is announced by the screen reader. To announce the content of other variants, a mechanism similar to react-aria-live can be used
  *  - if Alert contains action slot, textual representation needs to be provided by using 'title', 'aria-label' or 'aria-labelledby' attributes
  */
-class Alert extends UIComponent<ReactProps<AlertProps>> {
+class Alert extends UIComponent<ReactProps<AlertProps>, AlertState> {
   static displayName = 'Alert'
   static className = 'ui-alert'
 
@@ -69,13 +84,22 @@ class Alert extends UIComponent<ReactProps<AlertProps>> {
     attached: PropTypes.oneOfType([PropTypes.bool, PropTypes.oneOf(['top', 'bottom'])]),
     danger: PropTypes.bool,
     info: PropTypes.bool,
+    onFocus: PropTypes.func,
     success: PropTypes.bool,
     warning: PropTypes.bool,
   }
 
-  static defaultProps = { accessibility: defaultBehavior }
+  static defaultProps = { accessibility: alertBehavior }
 
-  renderContent = ({ styles }: RenderResultConfig<AlertProps>) => {
+  state = { isFromKeyboard: false }
+
+  handleFocus = (e: React.SyntheticEvent) => {
+    this.setState({ isFromKeyboard: isFromKeyboard() })
+
+    _.invoke(this.props, 'onFocus', e, this.props)
+  }
+
+  renderContent = ({ styles, accessibility }: RenderResultConfig<AlertProps>) => {
     const { action, content } = this.props
 
     return (
@@ -84,6 +108,7 @@ class Alert extends UIComponent<ReactProps<AlertProps>> {
           defaultProps: {
             className: Alert.slotClassNames.content,
             styles: styles.content,
+            ...accessibility.attributes.content,
           },
         })}
         {Button.create(action, {
@@ -105,6 +130,7 @@ class Alert extends UIComponent<ReactProps<AlertProps>> {
     return (
       <ElementType
         className={classes.root}
+        onFocus={this.handleFocus}
         {...accessibility.attributes.root}
         {...rtlTextContainer.getAttributes({ forElements: [children, content] })}
         {...unhandledProps}

@@ -5,6 +5,7 @@ import { Provider, themes } from '@stardust-ui/react'
 import { mergeThemes } from 'src/lib'
 import { ThemeContext, ThemeContextData, themeContextDefaults } from './context/ThemeContext'
 import Router from './routes'
+import { PerfDataProvider } from './components/ComponentDoc/PerfChart'
 
 class App extends React.Component<any, ThemeContextData> {
   // State also contains the updater function so it will
@@ -19,6 +20,7 @@ class App extends React.Component<any, ThemeContextData> {
     return (
       <ThemeContext.Provider value={this.state}>
         <Provider
+          as={React.Fragment}
           theme={mergeThemes(themes[themeName], {
             // adjust Teams' theme to Semantic UI's font size scheme
             staticStyles: [
@@ -26,17 +28,13 @@ class App extends React.Component<any, ThemeContextData> {
                 a: {
                   textDecoration: 'none',
                 },
-                html: {
-                  fontSize: '14px',
-                },
-                body: {
-                  fontSize: '1rem',
-                },
               },
             ],
           })}
         >
-          <Router />
+          <PerfDataProvider>
+            <Router />
+          </PerfDataProvider>
         </Provider>
       </ThemeContext.Provider>
     )
