@@ -16,6 +16,8 @@
 This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### BREAKING CHANGES
+- Add focus border styling mechanism @Bugaa92 ([#1269](https://github.com/stardust-ui/react/pull/1269))
 
 ### Fixes
 - Update `ChatMessage` styles in Teams themes @layershifter ([#1246](https://github.com/stardust-ui/react/pull/1246))
